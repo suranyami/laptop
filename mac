@@ -1,9 +1,15 @@
 #!/usr/bin/env bash
 
-echo "Checking for SSH key, generating one if it doesn't exist ..."
+echo "Checking for SSH key, generating one if it doesn't exist..."
   [[ -f ~/.ssh/id_rsa.pub ]] || ssh-keygen -t rsa
 
-echo "Copying public key to clipboard. Paste it into your Github account ..."
+echo "Downloading default dotfiles..."
+  mkdir -p ~/development
+  [[ -d ~/development/dotfiles ]] || git clone git://github.com/tpftester/dotfiles.git ~/development/dotfiles
+  gem install trollop
+  ruby ~/development/dotfiles/install.rb
+
+echo "Copying public key to clipboard. Paste it into your Github account..."
   [[ -f ~/.ssh/id_rsa.pub ]] && cat ~/.ssh/id_rsa.pub | pbcopy
   open https://github.com/account/ssh
 
@@ -11,17 +17,26 @@ echo "Installing Homebrew, a good OS X package manager ..."
   /usr/bin/ruby -e "$(curl -fsSL https://raw.github.com/gist/323731)"
   brew update
 
-echo "Put Homebrew location earlier in PATH ..."
+echo "Installing Oh-My-Zsh, an awesome shell environment..."
+  [[ -d ~/.oh-my-zsh ]] || (curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh)
+
+echo "Put Homebrew location earlier in PATH..."
   echo "
 # recommended by brew doctor
 export PATH='/usr/local/bin:$PATH'" >> ~/.zshrc
   source ~/.zshrc
 
-echo "Installing Postgres, a good open source relational database ..."
+echo "Installing Postgres, a good open source relational database..."
   brew install postgres --no-python
+
+echo "Installing MySQL, a not-so-good open source relational database ..."
+  brew install mysql
 
 echo "Installing Redis, a good key-value database ..."
   brew install redis
+
+echo "Installing MongoDB, a good key-value database ..."
+  brew install mongodb
 
 echo "Installing ack, a good way to search through files ..."
   brew install ack
@@ -44,3 +59,4 @@ echo "Installing RVM (Ruby Version Manager) ..."
 
 bash < <(curl -s https://raw.github.com/thoughtbot/laptop/master/ruby)
 bash < <(curl -s https://raw.github.com/thoughtbot/laptop/master/heroku)
+
