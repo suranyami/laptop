@@ -6,7 +6,6 @@ echo "Checking for SSH key, generating one if it doesn't exist..."
 echo "Downloading default dotfiles..."
   mkdir -p ~/development
   [[ -d ~/development/dotfiles ]] || git clone git://github.com/tpftester/dotfiles.git ~/development/dotfiles
-  gem install trollop
   ruby ~/development/dotfiles/install.rb
 
 echo "Copying public key to clipboard. Paste it into your Github account..."
